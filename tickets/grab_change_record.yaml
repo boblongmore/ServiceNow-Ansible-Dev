@@ -1,0 +1,24 @@
+---
+- name: Create ticket with notes
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  collections:
+  - servicenow.servicenow
+
+  tasks:
+  - name: include vars
+    include_vars: change_request_vars.yml
+
+  - name: grab a record
+    snow_record:
+      state: present
+      table: change_request
+      username: "{{ sn_username }}"
+      password: "{{ sn_password }}"
+      instance: "{{ sn_instance }}"
+      number: CHG0030008
+    register: new_incident
+
+  - debug: 
+      var: new_incident.record
